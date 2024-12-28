@@ -1,0 +1,136 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Object Detection</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #video {
+            width: 600px;
+            height: 600px;
+            border: 2px solid black;
+            margin-bottom: 20px;
+        }
+        #detected-object {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+    <script>
+        // Function to fetch the detected object name from the server
+        function fetchDetectedObject() {
+            fetch('/detected_object')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('detected-object').innerText = 
+                        'Detected Object: ' + (data.detected_object || 'None');
+                })
+                .catch(error => console.error('Error fetching detected object:', error));
+        }
+
+        // Fetch the detected object every second
+        setInterval(fetchDetectedObject, 1000);
+    </script>
+</head>
+<body>
+    <h1>Live Object Detection</h1>
+    <img id="video" src="{{ url_for('video_feed') }}" alt="Video Feed">
+    <div id="detected-object">
+        Detected Object: None
+    </div>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Object Detection</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        #video {
+            width: 600px;
+            height: 600px;
+            border: 2px solid black;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        #detected-object {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            transition: opacity 0.5s ease;
+            opacity: 1;
+        }
+        #toggle-audio {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        #toggle-audio:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        // Function to fetch the detected object name from the server
+        function fetchDetectedObject() {
+            fetch('/detected_object')
+                .then(response => response.json())
+                .then(data => {
+                    const detectedObjectDiv = document.getElementById('detected-object');
+                    detectedObjectDiv.innerText = 'Detected Object: ' + (data.detected_object || 'None');
+                    detectedObjectDiv.style.opacity = '1'; // Reset opacity for fade effect
+                })
+                .catch(error => console.error('Error fetching detected object:', error));
+        }
+
+        // Function to toggle audio feedback
+        function toggleAudio() {
+            fetch('/toggle_audio')
+                .then(response => response.json())
+                .then(data => {
+                    const button = document.getElementById('toggle-audio');
+                    button.innerText = data.audio_feedback_enabled ? 'Disable Audio Feedback' : 'Enable Audio Feedback';
+                })
+                .catch(error => console.error('Error toggling audio feedback:', error));
+        }
+
+        // Fetch the detected object every second
+        setInterval(fetchDetectedObject, 1000);
+    </script>
+</head>
+<body>
+    <h1>Live Object Detection</h1>
+    <img id="video" src="{{ url_for('video_feed') }}" alt="Video Feed">
+    <div id="detected-object">
+        Detected Object: None
+    </div>
+    <button id="toggle-audio" onclick="toggleAudio()">Disable Audio Feedback</button>
+</body>
+</html>
